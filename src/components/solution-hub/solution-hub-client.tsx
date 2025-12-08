@@ -7,6 +7,7 @@ import {
   ChevronRight,
   Lightbulb,
   Sparkles,
+  Check,
 } from 'lucide-react';
 import { getAutomationInsights, getSolutions } from '@/app/actions';
 import { useToast } from '@/hooks/use-toast';
@@ -30,6 +31,7 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion';
 import { Separator } from '@/components/ui/separator';
+import { Badge } from '@/components/ui/badge';
 
 const solutionInitialState = { message: '', error: null, solution: null };
 const insightsInitialState = { message: '', error: null, insights: null };
@@ -184,10 +186,23 @@ export function SolutionHubClient() {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
-              <div
-                className="prose prose-sm dark:prose-invert max-w-none"
-                dangerouslySetInnerHTML={{ __html: solutionState.solution.replace(/\n/g, '<br />') }}
-              />
+              <div className="space-y-6">
+                {solutionState.solution.map((solution, index) => (
+                  <div key={index} className="rounded-lg border bg-background/50 p-6">
+                    <h3 className="mb-2 text-xl font-bold font-headline">{solution.title}</h3>
+                    <p className="mb-4 text-muted-foreground">{solution.description}</p>
+                    <h4 className="mb-3 font-semibold">Key Features:</h4>
+                    <ul className="space-y-2">
+                      {solution.keyFeatures.map((feature, fIndex) => (
+                        <li key={fIndex} className="flex items-start">
+                          <Check className="mr-2 mt-1 h-4 w-4 text-primary flex-shrink-0" />
+                          <span>{feature}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                ))}
+              </div>
 
               <Separator />
 
@@ -211,7 +226,7 @@ export function SolutionHubClient() {
                         <input
                           type="hidden"
                           name="solution"
-                          value={solutionState.solution}
+                          value={JSON.stringify(solutionState.solution)}
                         />
                         <Button
                           type="submit"

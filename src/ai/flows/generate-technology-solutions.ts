@@ -21,10 +21,18 @@ export type GenerateTechnologySolutionsInput = z.infer<
   typeof GenerateTechnologySolutionsInputSchema
 >;
 
+const SolutionSchema = z.object({
+  title: z.string().describe('The title of the technology solution.'),
+  description: z.string().describe('A detailed description of the solution.'),
+  keyFeatures: z
+    .array(z.string())
+    .describe('A list of key features of the solution.'),
+});
+
 const GenerateTechnologySolutionsOutputSchema = z.object({
   suggestedSolutions: z
-    .string()
-    .describe('Technology-driven solutions to the described problem.'),
+    .array(SolutionSchema)
+    .describe('A list of technology-driven solutions to the described problem.'),
 });
 
 export type GenerateTechnologySolutionsOutput = z.infer<
@@ -45,10 +53,10 @@ const prompt = ai.definePrompt({
 
   Problem Description: {{{problemDescription}}}
 
-  Based on the problem description, suggest technology-driven solutions that can address the problem.
+  Based on the problem description, suggest a list of technology-driven solutions that can address the problem.
+  For each solution, provide a title, a detailed description, and a list of key features.
   Your solutions should be clear, concise, and actionable.
   Provide a variety of solutions leveraging technologies such as automation, sensors, cloud storage, and data analytics, if applicable.
-  Your response should provide the suggested solutions in a well-formatted string.
   `,
 });
 
