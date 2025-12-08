@@ -1,1 +1,5 @@
-// Flows will be imported for their side effects in this file.
+import { config } from 'dotenv';
+config();
+
+import '@/ai/flows/provide-task-automation-insights.ts';
+import '@/ai/flows/generate-technology-solutions.ts';
